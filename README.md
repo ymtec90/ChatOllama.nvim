@@ -1,11 +1,10 @@
-# ChatGPT.nvim
+# ChatOllama.nvim
 
 ![GitHub Workflow Status](http://img.shields.io/github/actions/workflow/status/jackMort/ChatGPT.nvim/default.yml?branch=main&style=for-the-badge)
 ![Lua](https://img.shields.io/badge/Made%20with%20Lua-blueviolet.svg?style=for-the-badge&logo=lua)
 
-`ChatGPT` is a Neovim plugin that allows you to effortlessly utilize the OpenAI
-ChatGPT API, empowering you to generate natural language responses from
-OpenAI's ChatGPT directly within the editor in response to your inquiries.
+`ChatOllama` is a Neovim plugin that allows you to effortlessly utilize the Olllama API, empowering you to generate natural language responses from
+Ollama directly within the editor in response to your inquiries.
 
 ![preview image](https://github.com/jackMort/ChatGPT.nvim/blob/media/preview-2.png?raw=true)
 
@@ -46,19 +45,6 @@ a plugin showcase [video](https://www.youtube.com/watch?v=7k0KZsheLP4)
 ## Installation
 
 - Make sure you have `curl` installed.
-
-- Get an API key from OpenAI, which you can [obtain here](https://beta.openai.com/account/api-keys). (NOTE: a ChatGPT Plus subscription doesn't currently include the required API credits. You'll have to buy API credits [separately](https://platform.openai.com/account/billing/overview).)
-
-The OpenAI API key can be provided in one of the following two ways:
-
-1. In the configuration option `api_key_cmd`, provide the path and arguments to
-   an executable that returns the API key via stdout.
-
-1. Setting it via an environment variable called `$OPENAI_API_KEY`.
-
-Custom OpenAI API host with the configuration option `api_host_cmd` or
-environment variable called `$OPENAI_API_HOST`. It's useful if you can't access
-OpenAI directly
 
 Custom cURL parameters can be passed using the configuration option `extra_curl_params`.
 It can be useful if you need to include additional headers for requests:
@@ -150,9 +136,9 @@ or if you are using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ## Configuration
 
-`ChatGPT.nvim` comes with the following defaults, you can override them by passing config as setup param
+`ChatOllama.nvim` comes with the following defaults, you can override them by passing config as setup param
 
-https://github.com/jackMort/ChatGPT.nvim/blob/main/lua/chatgpt/config.lua
+https://github.com/ymtec90/ChatOllama.nvim/blob/main/lua/chatgpt/config.lua
 
 ### Example Configuration
 
