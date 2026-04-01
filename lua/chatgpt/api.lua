@@ -8,17 +8,20 @@ local Api = {}
 function Api.completions(custom_params, cb)
   local openai_params = Utils.collapsed_openai_params(Config.options.openai_params)
   local params = vim.tbl_extend("keep", custom_params, openai_params)
+  
+  -- Forçar o uso do modelo local do Ollama
+  params.model = "qwen2.5-coder:7b"
+  
   Api.make_call(Api.COMPLETIONS_URL, params, cb)
 end
 
 function Api.chat_completions(custom_params, cb, should_stop)
   local openai_params = Utils.collapsed_openai_params(Config.options.openai_params)
   local params = vim.tbl_extend("keep", custom_params, openai_params)
-  -- the custom params contains <dynamic> if model is not constant but function
-  -- therefore, use collapsed openai params (with function evaluated to get model) if that is the case
-  if params.model == "<dynamic>" then
-    params.model = openai_params.model
-  end
+  
+  -- Forçar o uso do modelo local do Ollama
+  params.model = "qwen2.5-coder:7b"
+  
   local stream = params.stream or false
   if stream then
     local raw_chunks = ""
@@ -114,7 +117,8 @@ function Api.edits(custom_params, cb)
   }
 
   local params = {
-    model = custom_params.model or Config.options.openai_edit_params.model,
+    -- Forçar o uso do modelo local do Ollama
+    model = "qwen2.5-coder:7b",
     messages = messages,
     temperature = custom_params.temperature,
     top_p = custom_params.top_p,
@@ -214,6 +218,8 @@ local splitCommandIntoTable = function(command)
   return cmd
 end
 
+-- Funções utilitárias mantidas para não quebrar dependências do plugin,
+-- embora não sejam mais estritamente necessárias para a inicialização do Ollama.
 local function loadConfigFromCommand(command, optionName, callback, defaultValue)
   local cmd = splitCommandIntoTable(command)
   job
@@ -248,62 +254,6 @@ local function loadConfigFromEnv(envName, configName, callback)
   end
 end
 
-local function loadOptionalConfig(envName, configName, optionName, callback, defaultValue)
-  loadConfigFromEnv(envName, configName)
-  if Api[configName] then
-    callback(Api[configName])
-  elseif Config.options[optionName] ~= nil and Config.options[optionName] ~= "" then
-    loadConfigFromCommand(Config.options[optionName], optionName, callback, defaultValue)
-  else
-    callback(defaultValue)
-  end
-end
-
-local function loadRequiredConfig(envName, configName, optionName, callback, defaultValue)
-  loadConfigFromEnv(envName, configName, callback)
-  if not Api[configName] then
-    if Config.options[optionName] ~= nil and Config.options[optionName] ~= "" then
-      loadConfigFromCommand(Config.options[optionName], optionName, callback, defaultValue)
-    else
-      logger.warn(configName .. " variable not set")
-      return
-    end
-  end
-end
-
-local function loadAzureConfigs()
-  loadRequiredConfig("OPENAI_API_BASE", "OPENAI_API_BASE", "azure_api_base_cmd", function(base)
-    Api.OPENAI_API_BASE = base
-
-    loadRequiredConfig("OPENAI_API_AZURE_ENGINE", "OPENAI_API_AZURE_ENGINE", "azure_api_engine_cmd", function(engine)
-      Api.OPENAI_API_AZURE_ENGINE = engine
-
-      loadOptionalConfig(
-        "OPENAI_API_AZURE_VERSION",
-        "OPENAI_API_AZURE_VERSION",
-        "azure_api_version_cmd",
-        function(version)
-          Api.OPENAI_API_AZURE_VERSION = version
-
-          if Api["OPENAI_API_BASE"] and Api["OPENAI_API_AZURE_ENGINE"] then
-            Api.COMPLETIONS_URL = Api.OPENAI_API_BASE
-              .. "/openai/deployments/"
-              .. Api.OPENAI_API_AZURE_ENGINE
-              .. "/completions?api-version="
-              .. Api.OPENAI_API_AZURE_VERSION
-            Api.CHAT_COMPLETIONS_URL = Api.OPENAI_API_BASE
-              .. "/openai/deployments/"
-              .. Api.OPENAI_API_AZURE_ENGINE
-              .. "/chat/completions?api-version="
-              .. Api.OPENAI_API_AZURE_VERSION
-          end
-        end,
-        "2023-05-15"
-      )
-    end)
-  end)
-end
-
 local function startsWith(str, start)
   return string.sub(str, 1, string.len(start)) == start
 end
@@ -313,28 +263,20 @@ local function ensureUrlProtocol(str)
     return str
   end
 
-  return "https://" .. str
+  -- Modificado para HTTP por padrão para conexões locais com Ollama
+  return "http://" .. str 
 end
 
 function Api.setup()
-  loadOptionalConfig("OPENAI_API_HOST", "OPENAI_API_HOST", "api_host_cmd", function(host)
-    Api.OPENAI_API_HOST = host
-    Api.COMPLETIONS_URL = ensureUrlProtocol(Api.OPENAI_API_HOST .. "/v1/completions")
-    Api.CHAT_COMPLETIONS_URL = ensureUrlProtocol(Api.OPENAI_API_HOST .. "/v1/chat/completions")
-  end, "api.openai.com")
-
-  loadRequiredConfig("OPENAI_API_KEY", "OPENAI_API_KEY", "api_key_cmd", function(key)
-    Api.OPENAI_API_KEY = key
-
-    loadOptionalConfig("OPENAI_API_TYPE", "OPENAI_API_TYPE", "api_type_cmd", function(type)
-      if type == "azure" then
-        loadAzureConfigs()
-        Api.AUTHORIZATION_HEADER = "api-key: " .. Api.OPENAI_API_KEY
-      else
-        Api.AUTHORIZATION_HEADER = "Authorization: Bearer " .. Api.OPENAI_API_KEY
-      end
-    end, "")
-  end)
+  -- Configuração direta para o Ollama local
+  Api.OPENAI_API_HOST = "localhost:11434"
+  Api.COMPLETIONS_URL = ensureUrlProtocol(Api.OPENAI_API_HOST .. "/v1/completions")
+  Api.CHAT_COMPLETIONS_URL = ensureUrlProtocol(Api.OPENAI_API_HOST .. "/v1/chat/completions")
+  
+  -- Ollama não precisa de chave de API, mas definimos um dummy para evitar que 
+  -- o curl falhe ou falte a variável no resto do código.
+  Api.OPENAI_API_KEY = "ollama-dummy-key"
+  Api.AUTHORIZATION_HEADER = "Authorization: Bearer " .. Api.OPENAI_API_KEY
 end
 
 function Api.exec(cmd, args, on_stdout_chunk, on_complete, should_stop, on_stop)
