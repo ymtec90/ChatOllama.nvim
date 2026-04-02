@@ -76,15 +76,15 @@ Executa ações específicas. Exemplos:
 `ChatGPTRun fix_bugs`: Tenta encontrar e corrigir erros no trecho selecionado.
 
 ## Atalhos na Janela Interativa
-<C-Enter> / <Enter>: Enviar prompt
+`<C-Enter> / <Enter>`: Enviar prompt
 
-q: Fechar janela
+`q`: Fechar janela
 
-<C-c>: Interromper geração
+`<C-c>`: Interromper geração
 
-]c / [c: Navegar entre blocos de código
+`]c / [c`: Navegar entre blocos de código
 
-y: Copiar bloco de código sob o cursor
+`y`: Copiar bloco de código sob o cursor
 
 ## Mapeamentos Sugeridos (WhichKey)
 ```lua
