@@ -100,3 +100,10 @@ wk.register({
     },
 }, { prefix = "<leader>" })
 ```
+## 💖 Créditos e Agradecimentos
+
+Este projeto é um fork direto do incrível [ChatGPT.nvim](https://github.com/jackMort/ChatGPT.nvim), criado por [jackMort](https://github.com/jackMort). 
+
+Toda a fundação da interface de usuário (UI), renderização de markdown, mapeamentos de teclas e a arquitetura central do plugin são méritos do projeto original. O **ChatOllama.nvim** nasceu com o propósito de adaptar essa excelente base para um ecossistema 100% local, focado em privacidade e custo zero, utilizando o [Ollama](https://ollama.com/).
+
+Se você gosta da experiência de uso deste plugin, por favor, considere dar uma estrela (⭐) no [repositório original](https://github.com/jackMort/ChatGPT.nvim) e apoiar o criador!
