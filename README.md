@@ -1,108 +1,36 @@
-# ChatOllama.nvim
+ChatOllama.nvim
+ChatOllama is a Neovim plugin that allows you to effortlessly utilize the Ollama API, empowering you to generate natural language responses and code from local LLMs directly within your editor.
 
-![GitHub Workflow Status](http://img.shields.io/github/actions/workflow/status/jackMort/ChatGPT.nvim/default.yml?branch=main&style=for-the-badge)
-![Lua](https://img.shields.io/badge/Made%20with%20Lua-blueviolet.svg?style=for-the-badge&logo=lua)
+By leveraging Ollama, this fork ensures complete privacy, zero API costs, and offline capabilities. Your code and prompts never leave your machine!
 
-`ChatOllama` is a Neovim plugin that allows you to effortlessly utilize the Olllama API, empowering you to generate natural language responses from
-Ollama directly within the editor in response to your inquiries.
+(Note: To maintain compatibility with the original codebase, the core commands and Lua modules retain the chatgpt nomenclature, but everything under the hood is routed to your local Ollama instance).
 
-![preview image](https://github.com/jackMort/ChatGPT.nvim/blob/media/preview-2.png?raw=true)
+Features
+Interactive Q&A: Engage in interactive question-and-answer sessions with powerful local models using an intuitive interface.
 
-## Features
+Persona-based Conversations: Explore various perspectives and have conversations with different personas by selecting prompts from community-driven prompt libraries.
 
-- **Interactive Q&A**: Engage in interactive question-and-answer sessions with
-the powerful gpt model (ChatGPT) using an intuitive interface.
+Code Editing Assistance: Enhance your coding experience with an interactive editing window powered by your local LLM, offering instructions tailored for coding tasks.
 
-- **Persona-based Conversations**: Explore various perspectives and have
-conversations with different personas by selecting prompts from Awesome ChatGPT
-Prompts.
+Code Completion: Enjoy the convenience of local, AI-driven code completion. Let your local models suggest snippets and completions based on context and programming patterns.
 
-- **Code Editing Assistance**: Enhance your coding experience with an interactive
-editing window powered by the gpt model, offering instructions tailored for
-coding tasks.
+Customizable Actions: Execute a range of actions utilizing Ollama, such as grammar correction, translation, keyword generation, docstring creation, test addition, code optimization, summarization, bug fixing, code explanation, and code readability analysis. You can also define your own custom actions using a JSON file.
 
-- **Code Completion**: Enjoy the convenience of code completion similar to GitHub
-Copilot, leveraging the capabilities of the gpt model to suggest code snippets
-and completions based on context and programming patterns.
+Rich Message Rendering: Enhanced chat display with styled code blocks (language headers, copy indicators, foldable), markdown formatting (headers, bold, italic, lists, blockquotes, links), diff highlighting, and sender indicators.
 
-- **Customizable Actions**: Execute a range of actions utilizing the gpt model,
-such as grammar correction, translation, keyword generation, docstring creation,
-test addition, code optimization, summarization, bug fixing, code explanation,
-Roxygen editing, and code readability analysis. Additionally, you can define
-your own custom actions using a JSON file.
+Inline Context References: Use @ to add context from LSP definitions or project files directly in your prompts. References are displayed inline and expanded when sending to the API.
 
-- **Rich Message Rendering**: Enhanced chat display with styled code blocks
-(language headers, copy indicators, foldable), markdown formatting (headers,
-bold, italic, lists, blockquotes, links), diff highlighting, and sender indicators.
+Installation
+Make sure you have curl installed on your system.
 
-- **Inline Context References**: Use `@` to add context from LSP definitions or
-project files directly in your prompts. References are displayed inline and
-expanded when sending to the API.
+Make sure you have Ollama installed and running locally.
 
-For a comprehensive understanding of the extension's functionality, you can watch
-a plugin showcase [video](https://www.youtube.com/watch?v=7k0KZsheLP4)
+If you are using packer.nvim as your plugin manager:
 
-## Installation
-
-- Make sure you have `curl` installed.
-
-Custom cURL parameters can be passed using the configuration option `extra_curl_params`.
-It can be useful if you need to include additional headers for requests:
-
-```lua
-{
-  ...,
-  extra_curl_params = {
-    "-H",
-    "Origin: https://example.com"
-  }
-}
-```
-
-For Azure deployments, you need to specify the URL base, the engine, and the API
-type. You can accomplish this in one of two ways:
-
-1. Use the configuration options `api_type_cmd`, `azure_api_base`,
-`azure_api_engine_cmd`, and `azure_api_version_cmd`. Each of these should be
-an executable command that returns the corresponding value.
-
-For example:
-
-```lua
-  local config = {
-    api_host_cmd = 'echo -n ""',
-    api_key_cmd = 'pass azure-openai-key',
-    api_type_cmd = 'echo azure',
-    azure_api_base_cmd = 'echo https://{your-resource-name}.openai.azure.com',
-    azure_api_engine_cmd = 'echo chat',
-    azure_api_version_cmd = 'echo 2023-05-15'
-  }
-
-  require("chatgpt").setup(config)
-```
-
-2. Set the values via the environment variables `$OPENAI_API_TYPE`,
-`$OPENAI_API_BASE`, `$OPENAI_API_AZURE_ENGINE`, and `$OPENAI_API_AZURE_VERSION`.
-
-For example:
-
-```bash
-export OPENAI_API_TYPE="azure"
-export OPENAI_API_BASE="https://{your-resource-name}.openai.azure.com"
-export OPENAI_API_AZURE_ENGINE="chat"
-export OPENAI_API_AZURE_VERSION="2023-05-15"
-```
-
-Please note that edit models have been deprecated and may not function as
-expected.
-
-If you are using [packer.nvim](https://github.com/wbthomason/packer.nvim) as
-plugin manager:
-
-```lua
+Lua
 -- Packer
 use({
-  "jackMort/ChatGPT.nvim",
+  "ymtec90/ChatOllama.nvim",
     config = function()
       require("chatgpt").setup()
     end,
@@ -113,14 +41,12 @@ use({
       "nvim-telescope/telescope.nvim"
     }
 })
-```
+or if you are using lazy.nvim:
 
-or if you are using [lazy.nvim](https://github.com/folke/lazy.nvim):
-
-```lua
+Lua
 -- Lazy
 {
-  "jackMort/ChatGPT.nvim",
+  "ymtec90/ChatOllama.nvim",
     event = "VeryLazy",
     config = function()
       require("chatgpt").setup()
@@ -132,37 +58,33 @@ or if you are using [lazy.nvim](https://github.com/folke/lazy.nvim):
       "nvim-telescope/telescope.nvim"
     }
 }
-```
+Configuration
+ChatOllama.nvim comes with default settings tailored for local execution. You can override them by passing a configuration table to the setup function.
 
-## Configuration
-
-`ChatOllama.nvim` comes with the following defaults, you can override them by passing config as setup param
-
+Check the default configurations here:
 https://github.com/ymtec90/ChatOllama.nvim/blob/main/lua/chatgpt/config.lua
 
-### Example Configuration
+Example Configuration
+A simple configuration pointing to your preferred local coding model could look something like this:
 
-A simple configuration of the chat model could look something like this:
-```lua
+Lua
 {
-  "jackMort/ChatGPT.nvim",
+  "ymtec90/ChatOllama.nvim",
   event = "VeryLazy",
   config = function()
     require("chatgpt").setup({
-      -- this config assumes you have OPENAI_API_KEY environment variable set
+      -- Ollama specific parameters
       openai_params = {
         -- NOTE: model can be a function returning the model name
-        -- this is useful if you want to change the model on the fly
-        -- using commands
         -- Example:
         -- model = function()
         --     if some_condition() then
-        --         return "gpt-5"
+        --         return "llama3"
         --     else
-        --         return "gpt-5-mini"
+        --         return "qwen2.5-coder:7b"
         --     end
         -- end,
-        model = "gpt-5-mini",
+        model = "qwen2.5-coder:7b",
         frequency_penalty = 0,
         presence_penalty = 0,
         max_tokens = 4095,
@@ -175,77 +97,29 @@ A simple configuration of the chat model could look something like this:
   dependencies = {
     "MunifTanjim/nui.nvim",
     "nvim-lua/plenary.nvim",
-      "folke/trouble.nvim", -- optional
+    "folke/trouble.nvim", -- optional
     "nvim-telescope/telescope.nvim"
   }
 }
-```
+Usage
+The plugin exposes the following commands. (Note: The commands retain their original ChatGPT prefix to ensure backward compatibility and avoid breaking existing workflows or WhichKey configurations).
 
-### Secrets Management
+ChatGPT
+ChatGPT command opens an interactive chat window using your configured local model (e.g., qwen2.5-coder:7b).
 
-Providing the OpenAI API key via an environment variable is dangerous, as it
-leaves the API key easily readable by any process that can access the
-environment variables of other processes. In addition, it encourages the user
-to store the credential in clear-text in a configuration file.
+ChatGPTActAs
+ChatGPTActAs command opens a prompt selection menu to define the system persona before starting a chat with your local model.
 
-As an alternative to providing the API key via the `OPENAI_API_KEY` environment
-variable, the user is encouraged to use the `api_key_cmd` configuration option.
-The `api_key_cmd` configuration option takes a string, which is executed at
-startup, and whose output is used as the API key.
+ChatGPTEditWithInstructions
+ChatGPTEditWithInstructions command opens an interactive window to edit the selected text or the whole buffer using your local model.
 
-The following configuration would use 1Passwords CLI, `op`, to fetch the API key
-from the `credential` field of the `OpenAI` entry.
+You can map it using the Lua API, e.g., using which-key.nvim:
 
-```lua
-require("chatgpt").setup({
-    api_key_cmd = "op read op://private/OpenAI/credential --no-newline"
-})
-```
-
-The following configuration would use GPG to decrypt a local file containing the
-API key
-
-```lua
-local home = vim.fn.expand("$HOME")
-require("chatgpt").setup({
-    api_key_cmd = "gpg --decrypt " .. home .. "/secret.txt.gpg"
-})
-```
-
-Note that the `api_key_cmd` arguments are split by whitespace. If you need
-whitespace inside an argument (for example to reference a path with spaces),
-you can wrap it in a separate script.
-
-## Usage
-
-Plugin exposes following commands:
-
-### `ChatGPT`
-
-`ChatGPT` command which opens interactive window using the `gpt-5-mini`
-model.
-(also known as `ChatGPT`)
-
-### `ChatGPTActAs`
-
-`ChatGPTActAs` command which opens a prompt selection from
-[Awesome ChatGPT Prompts](https://github.com/f/awesome-chatgpt-prompts)
-to be used with the `gpt-5-mini` model.
-
-![preview image](https://github.com/jackMort/ChatGPT.nvim/blob/media/preview-3.png?raw=true)
-
-### `ChatGPTEditWithInstructions`
-
-`ChatGPTEditWithInstructions` command which opens interactive window to edit
-selected text or whole window using the `gpt-5-mini` model (configurable).
-
-You can map it using the Lua API, e.g. using `which-key.nvim`:
-
-```lua
+Lua
 local chatgpt = require("chatgpt")
 wk.register({
     p = {
-        name = "ChatGPT",
+        name = "ChatOllama",
         e = {
             function()
                 chatgpt.edit_with_instructions()
@@ -257,48 +131,52 @@ wk.register({
     prefix = "<leader>",
     mode = "v",
 })
-```
+ChatGPTRun
+ChatGPTRun [action] command runs specific actions -- See actions.json file for a detailed list. Available actions are:
 
-- [demo video](https://www.youtube.com/watch?v=dWe01EV0q3Q).
+grammar_correction
 
-![preview image](https://github.com/jackMort/ChatGPT.nvim/blob/media/preview.png?raw=true)
+translate
 
-#### `ChatGPTRun`
+keywords
 
-`ChatGPTRun [action]` command which runs specific actions -- See
-[`actions.json`](./lua/chatgpt/flows/actions/actions.json) file for a detailed
-list. Available actions are:
+docstring
 
-  1. `grammar_correction`
-  2. `translate`
-  3. `keywords`
-  4. `docstring`
-  5. `add_tests`
-  6. `optimize_code`
-  7. `summarize`
-  8. `fix_bugs`
-  9. `explain_code`
-  10. `roxygen_edit`
-  11. `code_readability_analysis` -- see [demo](https://youtu.be/zlU3YGGv2zY)
-  12. `fix_diagnostic` -- fix error under cursor
-  13. `explain_diagnostic` -- explain error under cursor
-  14. `fix_diagnostics` -- fix all errors in selection
+add_tests
 
-All the above actions are using `gpt-5-mini` model.
+optimize_code
 
-It is possible to define custom actions with a JSON file. See [`actions.json`](./lua/chatgpt/flows/actions/actions.json) for an example. The path of custom actions can be set in the config (see `actions_paths` field in the config example above).
+summarize
 
-An example of custom action may look like this: (`#` marks comments)
+fix_bugs
 
-```python
+explain_code
+
+roxygen_edit
+
+code_readability_analysis
+
+fix_diagnostic -- fix error under cursor
+
+explain_diagnostic -- explain error under cursor
+
+fix_diagnostics -- fix all errors in selection
+
+All the above actions will process completely locally via Ollama.
+
+It is possible to define custom actions with a JSON file. See actions.json for an example. The path of custom actions can be set in the config (see actions_paths field).
+
+An example of a custom action targeting Ollama may look like this:
+
+Python
 {
   "action_name": {
     "type": "chat", # or "completion" or "edit"
     "opts": {
       "template": "A template using possible variables",
       "strategy": "replace", # or "display" or "append" or "edit"
-      "params": { # parameters according to the official OpenAI API
-        "model": "gpt-5-mini", # or any other model supported by `"type"` in the OpenAI API, use the playground for reference
+      "params": { 
+        "model": "qwen2.5-coder:7b", # Any model you have pulled in Ollama
         "stop": [
           "```" # a string used to stop the model
         ]
@@ -306,83 +184,97 @@ An example of custom action may look like this: (`#` marks comments)
     },
     "args": {
       "argument": {
-          "type": "strig",
+          "type": "string",
           "optional": "true",
           "default": "some value"
       }
     }
   }
 }
-```
-
 Available template variables:
-- `{{input}}` - the selected text
-- `{{filetype}}` - neovim filetype
-- `{{filepath}}` - relative path to the file
-- `{{argument}}` - provided on the command line
-- `{{diagnostic}}` - LSP diagnostic under cursor (format: `[SEVERITY] message (line N)`)
-- `{{diagnostics}}` - all LSP diagnostics in selection (format: `Line N [SEVERITY]: message`)
 
-The `edit` strategy consists in showing the output side by side with the input and
-available for further editing requests.
-For now, `edit` strategy is implemented for `chat` type only.
+{{input}} - the selected text
 
-The `display` strategy shows the output in a float window.
+{{filetype}} - neovim filetype
 
-`append` and `replace` modify the text directly in the buffer.
+{{filepath}} - relative path to the file
 
-### Interactive popup
+{{argument}} - provided on the command line
 
-When using `ChatGPT` and `ChatGPTEditWithInstructions`, the following
-keybindings are available:
+{{diagnostic}} - LSP diagnostic under cursor (format: [SEVERITY] message (line N))
 
-**Submitting and Closing:**
-- `<C-Enter>` / `<Enter>` Submit prompt
-- `q` Close chat window
-- `<C-c>` Stop generating response
+{{diagnostics}} - all LSP diagnostics in selection (format: Line N [SEVERITY]: message)
 
-**Navigation:**
-- `]m` / `[m` Navigate to next/previous message
-- `]c` / `[c` Navigate to next/previous code block
-- `<C-u>` / `<C-d>` Scroll chat window up/down
-- `<Tab>` Cycle between windows
+Interactive popup
+When using ChatGPT and ChatGPTEditWithInstructions, the following keybindings are available:
 
-**Toggles (g prefix):**
-- `gs` Toggle settings panel (read-only)
-- `gh` Toggle help panel
-- `gp` Toggle sessions panel
-- `gr` Toggle system role window
-- `gm` Toggle message role (user/assistant)
-- `gl` Cycle layout modes (center/right)
-- `gn` Start new session
-- `gd` Draft message (add without sending)
+Submitting and Closing:
 
-**Actions:**
-- `y` Copy code block at cursor
-- `Y` Copy entire last answer
-- `d` Delete selected message
-- `e` Edit selected message
-- `r` Rename session (in sessions panel)
-- `za` Toggle fold for code block
-- `@` Trigger context autocomplete (LSP, project, file, git diff)
+<C-Enter> / <Enter> Submit prompt
 
-**Edit Window specific:**
-- `<C-y>` Accept changes
-- `<C-d>` Toggle diff view
-- `<C-i>` Use response as input
+q Close chat window
 
-The settings window (`gs`) displays current configuration (model, temperature,
-max_tokens, session name). To change settings, modify your `setup()` configuration.
+<C-c> Stop generating response
 
-### Whichkey plugin mappings
+Navigation:
 
-Add these to your [whichkey](https://github.com/folke/which-key.nvim) plugin
-mappings for convenient binds
+]m / [m Navigate to next/previous message
 
-```lua
+]c / [c Navigate to next/previous code block
+
+<C-u> / <C-d> Scroll chat window up/down
+
+<Tab> Cycle between windows
+
+Toggles (g prefix):
+
+gs Toggle settings panel (read-only)
+
+gh Toggle help panel
+
+gp Toggle sessions panel
+
+gr Toggle system role window
+
+gm Toggle message role (user/assistant)
+
+gl Cycle layout modes (center/right)
+
+gn Start new session
+
+gd Draft message (add without sending)
+
+Actions:
+
+y Copy code block at cursor
+
+Y Copy entire last answer
+
+d Delete selected message
+
+e Edit selected message
+
+r Rename session (in sessions panel)
+
+za Toggle fold for code block
+
+@ Trigger context autocomplete (LSP, project, file, git diff)
+
+Edit Window specific:
+
+<C-y> Accept changes
+
+<C-d> Toggle diff view
+
+<C-i> Use response as input
+
+Whichkey plugin mappings
+Add these to your whichkey plugin mappings for convenient binds:
+
+Lua
 c = {
-  name = "ChatGPT",
-    c = { "<cmd>ChatGPT<CR>", "ChatGPT" },
+  name = "ChatOllama",
+    c = { "<cmd>ChatGPT<CR>", "ChatOllama" },
     e = { "<cmd>ChatGPTEditWithInstruction<CR>", "Edit with instruction", mode = { "n", "v" } },
     g = { "<cmd>ChatGPTRun grammar_correction<CR>", "Grammar Correction", mode = { "n", "v" } },
     t = { "<cmd>ChatGPTRun translate<CR>", "Translate", mode = { "n", "v" } },
@@ -396,6 +288,3 @@ c = {
     r = { "<cmd>ChatGPTRun roxygen_edit<CR>", "Roxygen Edit", mode = { "n", "v" } },
     l = { "<cmd>ChatGPTRun code_readability_analysis<CR>", "Code Readability Analysis", mode = { "n", "v" } },
   },
-```
-
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/jackMort)
