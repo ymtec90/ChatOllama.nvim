@@ -242,18 +242,6 @@ local function loadConfigFromCommand(command, optionName, callback, defaultValue
     :start()
 end
 
-local function loadConfigFromEnv(envName, configName, callback)
-  local variable = os.getenv(envName)
-  if not variable then
-    return
-  end
-  local value = variable:gsub("%s+$", "")
-  Api[configName] = value
-  if callback then
-    callback(value)
-  end
-end
-
 local function startsWith(str, start)
   return string.sub(str, 1, string.len(start)) == start
 end
