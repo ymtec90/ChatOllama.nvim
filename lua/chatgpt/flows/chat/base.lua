@@ -448,17 +448,6 @@ function Chat:render_message_actions()
       virt_text_pos = "right_align",
     })
 
-    -- vim.api.nvim_buf_set_extmark(self.chat_window.bufnr, self.selected_message_nsid, msg.start_line, 0, {
-    --   virt_text = {
-    --     { "  ", "ChatGPTSelectedMessage" },
-    --     {
-    --       " Edit (" .. Config.options.chat.keymaps.edit_message .. ") ",
-    --       "ChatGPTMessageAction",
-    --     },
-    --     { " ", "ChatGPTSelectedMessage" },
-    --   },
-    --   virt_text_pos = "right_align",
-    -- })
   end
 end
 
