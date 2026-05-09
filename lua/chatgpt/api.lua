@@ -128,15 +128,7 @@ function Api.edits(custom_params, cb)
 end
 
 function Api.make_call(url, params, cb)
-  local tmp_msg_filename = os.tmpname()
-  local f = io.open(tmp_msg_filename, "w+")
-  if f == nil then
-    vim.notify("Cannot open temporary message file: " .. tmp_msg_filename, vim.log.levels.ERROR)
-    return
-  end
-  f:write(vim.fn.json_encode(params))
-  f:close()
-
+  local payload = vim.fn.json_encode(params)
   local args = {
     url,
     "-H",
@@ -144,7 +136,7 @@ function Api.make_call(url, params, cb)
     "-H",
     Api.AUTHORIZATION_HEADER,
     "-d",
-    "@" .. tmp_msg_filename,
+    "@-",
   }
 
   local extra_curl_params = Config.options.extra_curl_params
@@ -158,15 +150,18 @@ function Api.make_call(url, params, cb)
     :new({
       command = "curl",
       args = args,
+      writer = payload,
       on_exit = vim.schedule_wrap(function(response, exit_code)
-        Api.handle_response(response, exit_code, cb, tmp_msg_filename)
+        Api.handle_response(response, exit_code, cb)
       end),
     })
     :start()
 end
 
 Api.handle_response = vim.schedule_wrap(function(response, exit_code, cb, tmp_msg_filename)
-  os.remove(tmp_msg_filename)
+  if tmp_msg_filename ~= nil then
+    os.remove(tmp_msg_filename)
+  end
   if exit_code ~= 0 then
     vim.notify("An Error Occurred ...", vim.log.levels.ERROR)
     cb("ERROR: API Error")
