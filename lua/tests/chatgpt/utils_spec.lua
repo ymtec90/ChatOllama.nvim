@@ -84,3 +84,40 @@ describe("utils.replace_newlines_at_end", function()
     assert.is.equal("world\n\n", result)
   end)
 end)
+
+describe("utils.match_indentation", function()
+  it("should return output unchanged if indentation already matches", function()
+    local input = "  local function a()\n"
+    local output = "  print('hello')\n"
+    local result = utils.match_indentation(input, output)
+    assert.is.equal(output, result)
+  end)
+
+  it("should apply input indentation to output lines", function()
+    local input = "    print(a)\n"
+    local output = "a = 1\nb = 2\n"
+    local result = utils.match_indentation(input, output)
+    assert.is.equal("    a = 1\n    b = 2\n", result)
+  end)
+
+  it("should handle empty lines in output without adding trailing whitespace", function()
+    local input = "  def func():\n"
+    local output = "pass\n\nprint(1)\n"
+    local result = utils.match_indentation(input, output)
+    assert.is.equal("  pass\n\n  print(1)\n", result)
+  end)
+
+  it("should ignore leading newlines when finding indentation", function()
+    local input = "\n\n  hello\n"
+    local output = "\nworld\n"
+    local result = utils.match_indentation(input, output)
+    assert.is.equal("\n  world\n", result)
+  end)
+
+  it("should handle empty strings and string without newlines", function()
+    local input = "\t\tlocal a = 1"
+    local output = "b = 2"
+    local result = utils.match_indentation(input, output)
+    assert.is.equal("\t\tb = 2", result)
+  end)
+end)
