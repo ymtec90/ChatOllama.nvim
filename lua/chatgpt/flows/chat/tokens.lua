@@ -14,18 +14,18 @@ local cost_per_token = {
 -- @return The number of tokens in the given text.
 function Tokens.calculate_tokens(text)
   local tokens = 0
-  local current_token = ""
+  local current_token = {}
   for char in text:gmatch(".") do
     if char == " " or char == "\n" then
-      if current_token ~= "" then
+      if #current_token > 0 then
         tokens = tokens + 1
-        current_token = ""
+        current_token = {}
       end
     else
-      current_token = current_token .. char
+      table.insert(current_token, char)
     end
   end
-  if current_token ~= "" then
+  if #current_token > 0 then
     tokens = tokens + 1
   end
   return tokens
