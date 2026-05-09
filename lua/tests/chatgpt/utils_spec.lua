@@ -84,3 +84,42 @@ describe("utils.replace_newlines_at_end", function()
     assert.is.equal("world\n\n", result)
   end)
 end)
+
+describe("utils.wrapTextToTable", function()
+  it("should wrap text into a table of lines", function()
+    local text = "hello world"
+    local result = utils.wrapTextToTable(text, 5)
+    assert.are.same({ "hello", "world" }, result)
+  end)
+
+  it("should handle empty string", function()
+    local result = utils.wrapTextToTable("", 10)
+    assert.are.same({ "" }, result)
+  end)
+
+  it("should handle text shorter than maxLineLength", function()
+    local text = "hello"
+    local result = utils.wrapTextToTable(text, 10)
+    assert.are.same({ "hello" }, result)
+  end)
+
+  it("should handle long words that exceed maxLineLength", function()
+    local text = "supercalifragilisticexpialidocious"
+    local result = utils.wrapTextToTable(text, 5)
+    assert.are.same({ "supercalifragilisticexpialidocious" }, result)
+  end)
+
+  it("should handle existing newlines", function()
+    local text = "line1\nline2"
+    local result = utils.wrapTextToTable(text, 10)
+    assert.are.same({ "line1", "line2" }, result)
+  end)
+end)
+
+describe("utils.wrapText", function()
+  it("should wrap text and join with newlines", function()
+    local text = "hello world"
+    local result = utils.wrapText(text, 5)
+    assert.is.equal("hello\nworld", result)
+  end)
+end)
