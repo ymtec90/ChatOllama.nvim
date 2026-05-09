@@ -24,7 +24,7 @@ function Api.chat_completions(custom_params, cb, should_stop)
   
   local stream = params.stream or false
   if stream then
-    local raw_chunks = ""
+    local raw_chunks = {}
     local state = "START"
 
     cb = vim.schedule_wrap(cb)
@@ -63,7 +63,7 @@ function Api.chat_completions(custom_params, cb, should_stop)
         for line in chunk:gmatch("[^\n]+") do
           local raw_json = string.gsub(line, "^data: ", "")
           if raw_json == "[DONE]" then
-            cb(raw_chunks, "END")
+            cb(table.concat(raw_chunks), "END")
           else
             ok, json = pcall(vim.json.decode, raw_json, {
               luanil = {
@@ -80,7 +80,7 @@ function Api.chat_completions(custom_params, cb, should_stop)
                 and json.choices[1].delta.content
               then
                 cb(json.choices[1].delta.content, state)
-                raw_chunks = raw_chunks .. json.choices[1].delta.content
+                table.insert(raw_chunks, json.choices[1].delta.content)
                 state = "CONTINUE"
               end
             end
@@ -92,7 +92,7 @@ function Api.chat_completions(custom_params, cb, should_stop)
       end,
       should_stop,
       function()
-        cb(raw_chunks, "END")
+        cb(table.concat(raw_chunks), "END")
       end
     )
   else
