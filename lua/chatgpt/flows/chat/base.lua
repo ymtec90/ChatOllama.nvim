@@ -1272,10 +1272,7 @@ function Chat:open()
     on_change = vim.schedule_wrap(function(lines)
       -- Calculate tokens (~1.3 tokens per word)
       local text = table.concat(lines, "\n")
-      local word_count = 0
-      for _ in text:gmatch("%S+") do
-        word_count = word_count + 1
-      end
+      local _, word_count = text:gsub("%S+", "")
       self.current_tokens = math.ceil(word_count * 1.3)
       self:render_role()
 
