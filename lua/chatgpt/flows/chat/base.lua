@@ -1230,17 +1230,7 @@ function Chat:open()
   -- Store original buffer for context commands
   self.original_bufnr = vim.api.nvim_get_current_buf()
 
-  local displayed_params = Utils.table_shallow_copy(self.params)
-  -- if the param is decided by a function and not constant, write <dynamic> for now
-  -- TODO: if the current model should be displayed, the settings_panel would
-  -- have to be constantly modified or rewritten to be able to manage a function
-  -- returning the model as well
-  for key, value in pairs(self.params) do
-    if type(value) == "function" then
-      displayed_params[key] = "<dynamic>"
-    end
-  end
-  self.settings_panel = Settings.get_settings_panel("chat_completions", displayed_params, self.session.name)
+  self.settings_panel = Settings.get_settings_panel("chat_completions", self.params, self.session.name)
   self.help_panel = Help.get_help_panel("chat")
   self.sessions_panel = Sessions.get_panel(function(session)
     self:set_session(session)
