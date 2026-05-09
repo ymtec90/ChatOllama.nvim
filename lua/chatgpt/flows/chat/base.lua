@@ -925,11 +925,11 @@ function Chat:stopSpinner()
 end
 
 function Chat:toString()
-  local str = ""
+  local str_table = {}
   for _, msg in pairs(self.messages) do
-    str = str .. msg.text .. "\n"
+    table.insert(str_table, msg.text .. "\n")
   end
-  return str
+  return table.concat(str_table)
 end
 
 local function createContent(line)
