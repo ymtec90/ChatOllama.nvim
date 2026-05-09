@@ -128,7 +128,7 @@ function Api.edits(custom_params, cb)
 end
 
 function Api.make_call(url, params, cb)
-  local tmp_msg_filename = os.tmpname()
+  local tmp_msg_filename = vim.fn.tempname()
   local f = io.open(tmp_msg_filename, "w+")
   if f == nil then
     vim.notify("Cannot open temporary message file: " .. tmp_msg_filename, vim.log.levels.ERROR)
