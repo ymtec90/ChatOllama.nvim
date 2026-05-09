@@ -210,38 +210,6 @@ function Api.close()
   end
 end
 
-local splitCommandIntoTable = function(command)
-  local cmd = {}
-  for word in command:gmatch("%S+") do
-    table.insert(cmd, word)
-  end
-  return cmd
-end
-
--- Funções utilitárias mantidas para não quebrar dependências do plugin,
--- embora não sejam mais estritamente necessárias para a inicialização do Ollama.
-local function loadConfigFromCommand(command, optionName, callback, defaultValue)
-  local cmd = splitCommandIntoTable(command)
-  job
-    :new({
-      command = cmd[1],
-      args = vim.list_slice(cmd, 2, #cmd),
-      on_exit = function(j, exit_code)
-        if exit_code ~= 0 then
-          logger.warn("Config '" .. optionName .. "' did not return a value when executed")
-          return
-        end
-        local value = j:result()[1]:gsub("%s+$", "")
-        if value ~= nil and value ~= "" then
-          callback(value)
-        elseif defaultValue ~= nil and defaultValue ~= "" then
-          callback(defaultValue)
-        end
-      end,
-    })
-    :start()
-end
-
 local function startsWith(str, start)
   return string.sub(str, 1, string.len(start)) == start
 end
