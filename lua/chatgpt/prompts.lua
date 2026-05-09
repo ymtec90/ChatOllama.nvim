@@ -64,10 +64,14 @@ local finder = function(opts)
   local job_completed = false
   local results = {}
   local num_results = 0
+  local active_job = nil
 
   return setmetatable({
     close = function()
-      -- TODO: check if we need to make some cleanup
+      if active_job then
+        active_job:shutdown()
+        active_job = nil
+      end
     end,
   }, {
     __call = function(_, prompt, process_result, process_complete)
@@ -83,7 +87,7 @@ local finder = function(opts)
 
       if not job_started then
         job_started = true
-        job
+        active_job = job
           :new({
             command = "curl",
             args = {
