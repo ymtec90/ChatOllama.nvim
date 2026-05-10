@@ -346,8 +346,6 @@ function Chat:addAnswerPartial(text, state)
       end)
 
       local last_line_num = vim.api.nvim_buf_line_count(buffer)
-      -- busy call Signs.set_for_lines will cause neovim to freeze, and it will be redraw after completion
-      -- Signs.set_for_lines(self.chat_window.bufnr, start_line, last_line_num - 1, "chat")
       if i == length and i > 1 then
         Utils.modify_buf(self.chat_window.bufnr, function(bufnr)
           vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, { "" })
