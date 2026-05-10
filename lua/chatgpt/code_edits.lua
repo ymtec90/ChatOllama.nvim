@@ -270,10 +270,6 @@ M.edit_with_instructions = function(output_lines, bufnr, selection, ...)
         active_panel = open_extra_panels[#open_extra_panels]
       end
     end
-    for _, window in ipairs({ input_window, output_window }) do
-      vim.api.nvim_buf_set_option(window.bufnr, "filetype", filetype)
-      vim.api.nvim_win_set_option(window.winid, "number", true)
-    end
   end
 
   -- close_n
@@ -289,7 +285,12 @@ M.edit_with_instructions = function(output_lines, bufnr, selection, ...)
       popup:map(mode, Config.options.edit_with_instructions.keymaps.toggle_settings, function()
         toggle_extra_panel(settings_panel, false)
         -- set input and output settings
-        --  TODO
+        for _, window in ipairs({ input_window, output_window }) do
+          vim.api.nvim_buf_set_option(window.bufnr, "filetype", filetype)
+          if Config.options.show_line_numbers ~= false then
+            vim.api.nvim_win_set_option(window.winid, "number", true)
+          end
+        end
       end, {})
     end
   end
@@ -300,7 +301,12 @@ M.edit_with_instructions = function(output_lines, bufnr, selection, ...)
       popup:map(mode, Config.options.edit_with_instructions.keymaps.toggle_help, function()
         toggle_extra_panel(help_panel, false)
         -- set input and output settings
-        --  TODO
+        for _, window in ipairs({ input_window, output_window }) do
+          vim.api.nvim_buf_set_option(window.bufnr, "filetype", filetype)
+          if Config.options.show_line_numbers ~= false then
+            vim.api.nvim_win_set_option(window.winid, "number", true)
+          end
+        end
       end, {})
     end
   end
