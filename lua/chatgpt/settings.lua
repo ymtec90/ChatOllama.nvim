@@ -20,22 +20,18 @@ M.get_settings_panel = function(type, params, session_name)
     },
   })
   local panel = Popup(settings_window_opts)
+  M.panel = panel -- restore module level variable so existing external calls to M.render_content work as before
 
   -- Render after mount to get window dimensions
   panel:on("BufWinEnter", function()
-    M.render_content(panel, params, session_name)
+    M.render_content(params, session_name)
   end)
 
-  -- Expose render method to update dynamic parameters
-  panel.render = function()
-    M.render_content(panel, params, session_name)
-  end
-
-  M.panel = panel
   return panel
 end
 
-M.render_content = function(panel, params, session_name)
+M.render_content = function(params, session_name)
+  local panel = M.panel
   if not panel or not panel.winid or not vim.api.nvim_win_is_valid(panel.winid) then
     return
   end
@@ -61,11 +57,11 @@ M.render_content = function(panel, params, session_name)
 
   -- Add params
   for _, key in ipairs(params_to_show) do
-    if params[key] ~= nil then
-      local val = params[key]
-      if type(val) == "function" then
-        val = val()
-      end
+    local val = params[key]
+    if type(val) == "function" then
+      val = val()
+    end
+    if val ~= nil then
       table.insert(content, {
         { Config.options.settings_window.setting_sign .. key .. ": ", "Comment" },
         { tostring(val), Config.options.highlights.params_value },
