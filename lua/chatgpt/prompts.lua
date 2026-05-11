@@ -87,17 +87,14 @@ local finder = function(opts)
 
       if not job_started then
         job_started = true
-        active_job = job:new({
-          command = "curl",
-          args = {
-            opts.url,
-          },
-          on_exit = vim.schedule_wrap(function(j, exit_code)
-            local was_active = active_job ~= nil
-            active_job = nil
-
-            if exit_code ~= 0 then
-              if was_active then
+        active_job = job
+          :new({
+            command = "curl",
+            args = {
+              opts.url,
+            },
+            on_exit = vim.schedule_wrap(function(j, exit_code)
+              if exit_code ~= 0 then
                 vim.notify("An Error Occurred, cannot fetch list of prompts ...", vim.log.levels.ERROR)
               end
               process_complete()
