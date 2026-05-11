@@ -84,3 +84,55 @@ describe("utils.replace_newlines_at_end", function()
     assert.is.equal("world\n\n", result)
   end)
 end)
+
+describe("utils.calculate_percentage_width", function()
+  local mock_vim_api
+
+  before_each(function()
+    -- Initialize vim.api if not running in Neovim (like in a bare Lua environment mock)
+    -- But since this is a Neovim plugin, vim.api is normally available.
+    -- We can use stub from luassert if available, or manually backup the function
+    if not _G.vim then
+      _G.vim = { api = {} }
+    end
+    mock_vim_api = _G.vim.api.nvim_get_option
+    _G.vim.api.nvim_get_option = function(opt)
+      if opt == "columns" then
+        return 100
+      end
+      return 0
+    end
+  end)
+
+  after_each(function()
+    if mock_vim_api then
+      _G.vim.api.nvim_get_option = mock_vim_api
+    else
+      _G.vim.api.nvim_get_option = nil
+    end
+  end)
+
+  it("should calculate correct percentage width", function()
+    local result = utils.calculate_percentage_width("50%")
+    assert.is.equal(50, result)
+
+    result = utils.calculate_percentage_width("33.3%")
+    assert.is.equal(33, result) -- Because of math.floor
+  end)
+
+  it("should throw error if input is not a string", function()
+    assert.has_error(function()
+      utils.calculate_percentage_width(50)
+    end, "Input must be a string with a percent sign at the end (e.g. '50%').")
+  end)
+
+  it("should throw error if input string does not end with percent sign", function()
+    assert.has_error(function()
+      utils.calculate_percentage_width("50")
+    end, "Input must be a string with a percent sign at the end (e.g. '50%').")
+
+    assert.has_error(function()
+      utils.calculate_percentage_width("50% ")
+    end, "Input must be a string with a percent sign at the end (e.g. '50%').")
+  end)
+end)
