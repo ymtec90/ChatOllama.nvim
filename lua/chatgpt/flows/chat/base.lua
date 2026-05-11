@@ -346,8 +346,6 @@ function Chat:addAnswerPartial(text, state)
       end)
 
       local last_line_num = vim.api.nvim_buf_line_count(buffer)
-      -- busy call Signs.set_for_lines will cause neovim to freeze, and it will be redraw after completion
-      -- Signs.set_for_lines(self.chat_window.bufnr, start_line, last_line_num - 1, "chat")
       if i == length and i > 1 then
         Utils.modify_buf(self.chat_window.bufnr, function(bufnr)
           vim.api.nvim_buf_set_lines(bufnr, -1, -1, false, { "" })
@@ -448,17 +446,6 @@ function Chat:render_message_actions()
       virt_text_pos = "right_align",
     })
 
-    -- vim.api.nvim_buf_set_extmark(self.chat_window.bufnr, self.selected_message_nsid, msg.start_line, 0, {
-    --   virt_text = {
-    --     { "  ", "ChatGPTSelectedMessage" },
-    --     {
-    --       " Edit (" .. Config.options.chat.keymaps.edit_message .. ") ",
-    --       "ChatGPTMessageAction",
-    --     },
-    --     { " ", "ChatGPTSelectedMessage" },
-    --   },
-    --   virt_text_pos = "right_align",
-    -- })
   end
 end
 
@@ -925,11 +912,11 @@ function Chat:stopSpinner()
 end
 
 function Chat:toString()
-  local str = ""
+  local str_table = {}
   for _, msg in pairs(self.messages) do
-    str = str .. msg.text .. "\n"
+    table.insert(str_table, msg.text .. "\n")
   end
-  return str
+  return table.concat(str_table)
 end
 
 local function createContent(line)
@@ -1230,17 +1217,7 @@ function Chat:open()
   -- Store original buffer for context commands
   self.original_bufnr = vim.api.nvim_get_current_buf()
 
-  local displayed_params = Utils.table_shallow_copy(self.params)
-  -- if the param is decided by a function and not constant, write <dynamic> for now
-  -- TODO: if the current model should be displayed, the settings_panel would
-  -- have to be constantly modified or rewritten to be able to manage a function
-  -- returning the model as well
-  for key, value in pairs(self.params) do
-    if type(value) == "function" then
-      displayed_params[key] = "<dynamic>"
-    end
-  end
-  self.settings_panel = Settings.get_settings_panel("chat_completions", displayed_params, self.session.name)
+  self.settings_panel = Settings.get_settings_panel("chat_completions", self.params, self.session.name)
   self.help_panel = Help.get_help_panel("chat")
   self.sessions_panel = Sessions.get_panel(function(session)
     self:set_session(session)
@@ -1272,10 +1249,7 @@ function Chat:open()
     on_change = vim.schedule_wrap(function(lines)
       -- Calculate tokens (~1.3 tokens per word)
       local text = table.concat(lines, "\n")
-      local word_count = 0
-      for _ in text:gmatch("%S+") do
-        word_count = word_count + 1
-      end
+      local _, word_count = text:gsub("%S+", "")
       self.current_tokens = math.ceil(word_count * 1.3)
       self:render_role()
 
@@ -1761,6 +1735,9 @@ end
 function Chat:redraw(noinit)
   noinit = noinit or false
   self.layout:update(self:get_layout_params())
+  if self.settings_panel and self.settings_panel.render then
+    self.settings_panel.render()
+  end
   if not noinit then
     self:welcome()
   end
