@@ -83,7 +83,11 @@ function M.run_action(opts)
     local i = 2
     for key, value in pairs(item.args) do
       local arg = opts.fargs[i]
-      -- TODO: validataion
+      local optional = value.optional == true or value.optional == "true"
+      if not arg and not value.default and not optional then
+        vim.notify("Missing required argument: " .. key, vim.log.levels.WARN)
+        return
+      end
       item.opts.variables[key] = arg or value.default or ""
       i = i + 1
     end

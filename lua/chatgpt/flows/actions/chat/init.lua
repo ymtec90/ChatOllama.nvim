@@ -24,7 +24,6 @@ local Edits = require("chatgpt.code_edits")
 local ChatAction = classes.class(BaseAction)
 
 local STRATEGY_EDIT = "edit"
-local STRATEGY_REPLACE = "replace"
 local STRATEGY_APPEND = "append"
 local STRATEGY_PREPEND = "prepend"
 local STRATEGY_DISPLAY = "display"

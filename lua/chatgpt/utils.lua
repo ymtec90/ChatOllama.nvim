@@ -75,14 +75,18 @@ function M.wrapTextToTable(text, maxLineLength)
       local tmp_line = ""
       local words = M.split(line)
       for _, word in ipairs(words) do
-        if #tmp_line + #word + 1 > maxLineLength then
+        if tmp_line == "" then
+          tmp_line = word
+        elseif #tmp_line + #word + 1 > maxLineLength then
           table.insert(lines, tmp_line)
           tmp_line = word
         else
           tmp_line = tmp_line .. " " .. word
         end
       end
-      table.insert(lines, tmp_line)
+      if tmp_line ~= "" then
+        table.insert(lines, tmp_line)
+      end
     else
       table.insert(lines, line)
     end
