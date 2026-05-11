@@ -274,7 +274,12 @@ M.edit_with_instructions = function(output_lines, bufnr, selection, ...)
         active_panel = open_extra_panels[#open_extra_panels]
       end
     end
-    set_io_settings()
+    for _, window in ipairs({ input_window, output_window }) do
+      vim.api.nvim_buf_set_option(window.bufnr, "filetype", filetype)
+      if Config.options.show_line_numbers ~= false then
+        vim.api.nvim_win_set_option(window.winid, "number", true)
+      end
+    end
   end
 
   -- close_n
