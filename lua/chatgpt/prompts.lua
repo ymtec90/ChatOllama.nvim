@@ -96,31 +96,33 @@ local finder = function(opts)
             on_exit = vim.schedule_wrap(function(j, exit_code)
               if exit_code ~= 0 then
                 vim.notify("An Error Occurred, cannot fetch list of prompts ...", vim.log.levels.ERROR)
-                process_complete()
               end
-
-              local response = table.concat(j:result(), "\n")
-              local lines = {}
-              for line in string.gmatch(response, "[^\n]+") do
-                local act, _prompt = string.match(line, '"(.*)","(.*)"')
-                if act ~= "act" and act ~= nil then
-                  _prompt = string.gsub(_prompt, '""', '"')
-                  table.insert(lines, { act = act, prompt = _prompt })
-                end
-              end
-
-              for _, line in ipairs(lines) do
-                local v = entry_maker(line)
-                num_results = num_results + 1
-                results[num_results] = v
-                process_result(v)
-              end
-
               process_complete()
-              job_completed = true
-            end),
-          })
-          :start()
+              return
+            end
+
+            local response = table.concat(j:result(), "\n")
+            local lines = {}
+            for line in string.gmatch(response, "[^\n]+") do
+              local act, _prompt = string.match(line, '"(.*)","(.*)"')
+              if act ~= "act" and act ~= nil then
+                _prompt = string.gsub(_prompt, '""', '"')
+                table.insert(lines, { act = act, prompt = _prompt })
+              end
+            end
+
+            for _, line in ipairs(lines) do
+              local v = entry_maker(line)
+              num_results = num_results + 1
+              results[num_results] = v
+              process_result(v)
+            end
+
+            process_complete()
+            job_completed = true
+          end),
+        })
+        active_job:start()
       end
     end,
   })
