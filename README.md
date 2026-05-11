@@ -1,6 +1,5 @@
 # ChatOllama.nvim
 
-![GitHub Workflow Status](http://img.shields.io/github/actions/workflow/status/ymtec90/ChatOllama.nvim/default.yml?branch=main&style=for-the-badge)
 ![Lua](https://img.shields.io/badge/Made%20with%20Lua-blueviolet.svg?style=for-the-badge&logo=lua)
 
 `ChatOllama` é um plugin para Neovim que permite utilizar a API do Ollama de forma integrada, permitindo gerar respostas em linguagem natural e código a partir de LLMs locais diretamente no seu editor.
