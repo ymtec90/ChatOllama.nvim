@@ -129,6 +129,7 @@ end
 
 function Api.make_call(url, params, cb)
   local payload = vim.fn.json_encode(params)
+
   local args = {
     url,
     "-H",
@@ -158,10 +159,7 @@ function Api.make_call(url, params, cb)
     :start()
 end
 
-Api.handle_response = vim.schedule_wrap(function(response, exit_code, cb, tmp_msg_filename)
-  if tmp_msg_filename ~= nil then
-    os.remove(tmp_msg_filename)
-  end
+Api.handle_response = vim.schedule_wrap(function(response, exit_code, cb)
   if exit_code ~= 0 then
     vim.notify("An Error Occurred ...", vim.log.levels.ERROR)
     cb("ERROR: API Error")
