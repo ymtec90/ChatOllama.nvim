@@ -63,6 +63,15 @@ local hide_progress = function()
   end
 end
 
+local function set_io_settings()
+  for _, window in ipairs({ input_window, output_window }) do
+    vim.api.nvim_buf_set_option(window.bufnr, "filetype", filetype)
+    if Config.options.show_line_numbers ~= false then
+      vim.api.nvim_win_set_option(window.winid, "number", true)
+    end
+  end
+end
+
 local setup_and_mount = vim.schedule_wrap(function(lines, output_lines, ...)
   layout:mount()
   -- set input
@@ -76,12 +85,7 @@ local setup_and_mount = vim.schedule_wrap(function(lines, output_lines, ...)
   end
 
   -- set input and output settings
-  for _, window in ipairs({ input_window, output_window }) do
-    vim.api.nvim_buf_set_option(window.bufnr, "filetype", filetype)
-    if Config.options.show_line_numbers ~= false then
-      vim.api.nvim_win_set_option(window.winid, "number", true)
-    end
-  end
+  set_io_settings()
 end)
 
 M.edit_with_instructions = function(output_lines, bufnr, selection, ...)
