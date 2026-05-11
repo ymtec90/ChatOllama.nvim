@@ -24,7 +24,7 @@ function Api.chat_completions(custom_params, cb, should_stop)
   
   local stream = params.stream or false
   if stream then
-    local raw_chunks = ""
+    local raw_chunks = {}
     local state = "START"
 
     cb = vim.schedule_wrap(cb)
@@ -63,7 +63,7 @@ function Api.chat_completions(custom_params, cb, should_stop)
         for line in chunk:gmatch("[^\n]+") do
           local raw_json = string.gsub(line, "^data: ", "")
           if raw_json == "[DONE]" then
-            cb(raw_chunks, "END")
+            cb(table.concat(raw_chunks), "END")
           else
             ok, json = pcall(vim.json.decode, raw_json, {
               luanil = {
@@ -80,7 +80,7 @@ function Api.chat_completions(custom_params, cb, should_stop)
                 and json.choices[1].delta.content
               then
                 cb(json.choices[1].delta.content, state)
-                raw_chunks = raw_chunks .. json.choices[1].delta.content
+                table.insert(raw_chunks, json.choices[1].delta.content)
                 state = "CONTINUE"
               end
             end
@@ -92,7 +92,7 @@ function Api.chat_completions(custom_params, cb, should_stop)
       end,
       should_stop,
       function()
-        cb(raw_chunks, "END")
+        cb(table.concat(raw_chunks), "END")
       end
     )
   else
@@ -203,38 +203,6 @@ function Api.close()
   if Api.job then
     job:shutdown()
   end
-end
-
-local splitCommandIntoTable = function(command)
-  local cmd = {}
-  for word in command:gmatch("%S+") do
-    table.insert(cmd, word)
-  end
-  return cmd
-end
-
--- Funções utilitárias mantidas para não quebrar dependências do plugin,
--- embora não sejam mais estritamente necessárias para a inicialização do Ollama.
-local function loadConfigFromCommand(command, optionName, callback, defaultValue)
-  local cmd = splitCommandIntoTable(command)
-  job
-    :new({
-      command = cmd[1],
-      args = vim.list_slice(cmd, 2, #cmd),
-      on_exit = function(j, exit_code)
-        if exit_code ~= 0 then
-          logger.warn("Config '" .. optionName .. "' did not return a value when executed")
-          return
-        end
-        local value = j:result()[1]:gsub("%s+$", "")
-        if value ~= nil and value ~= "" then
-          callback(value)
-        elseif defaultValue ~= nil and defaultValue ~= "" then
-          callback(defaultValue)
-        end
-      end,
-    })
-    :start()
 end
 
 local function startsWith(str, start)
