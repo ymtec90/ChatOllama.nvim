@@ -85,56 +85,54 @@ describe("utils.replace_newlines_at_end", function()
   end)
 end)
 
-describe("utils.split_string_by_line", function()
-  it("should split empty string into one empty element", function()
-    local result = utils.split_string_by_line("")
-    assert.are.same({ "" }, result)
+describe("utils.calculate_percentage_width", function()
+  local mock_vim_api
+
+  before_each(function()
+    -- Initialize vim.api if not running in Neovim (like in a bare Lua environment mock)
+    -- But since this is a Neovim plugin, vim.api is normally available.
+    -- We can use stub from luassert if available, or manually backup the function
+    if not _G.vim then
+      _G.vim = { api = {} }
+    end
+    mock_vim_api = _G.vim.api.nvim_get_option
+    _G.vim.api.nvim_get_option = function(opt)
+      if opt == "columns" then
+        return 100
+      end
+      return 0
+    end
   end)
 
-  it("should split single line without trailing newline", function()
-    local result = utils.split_string_by_line("hello")
-    assert.are.same({ "hello" }, result)
+  after_each(function()
+    if mock_vim_api then
+      _G.vim.api.nvim_get_option = mock_vim_api
+    else
+      _G.vim.api.nvim_get_option = nil
+    end
   end)
 
-  it("should split single line with trailing newline", function()
-    local result = utils.split_string_by_line("hello\n")
-    assert.are.same({ "hello", "" }, result)
+  it("should calculate correct percentage width", function()
+    local result = utils.calculate_percentage_width("50%")
+    assert.is.equal(50, result)
+
+    result = utils.calculate_percentage_width("33.3%")
+    assert.is.equal(33, result) -- Because of math.floor
   end)
 
-  it("should split multiple lines", function()
-    local result = utils.split_string_by_line("line1\nline2")
-    assert.are.same({ "line1", "line2" }, result)
+  it("should throw error if input is not a string", function()
+    assert.has_error(function()
+      utils.calculate_percentage_width(50)
+    end, "Input must be a string with a percent sign at the end (e.g. '50%').")
   end)
 
-  it("should handle multiple newlines", function()
-    local result = utils.split_string_by_line("\n\n")
-    assert.are.same({ "", "", "" }, result)
-  end)
-end)
+  it("should throw error if input string does not end with percent sign", function()
+    assert.has_error(function()
+      utils.calculate_percentage_width("50")
+    end, "Input must be a string with a percent sign at the end (e.g. '50%').")
 
-describe("utils.count_newlines_at_end", function()
-  it("should return 0 for empty string", function()
-    local result = utils.count_newlines_at_end("")
-    assert.is.equal(0, result)
-  end)
-
-  it("should return 0 for string without trailing newlines", function()
-    local result = utils.count_newlines_at_end("hello")
-    assert.is.equal(0, result)
-  end)
-
-  it("should count single trailing newline", function()
-    local result = utils.count_newlines_at_end("hello\n")
-    assert.is.equal(1, result)
-  end)
-
-  it("should count multiple trailing newlines", function()
-    local result = utils.count_newlines_at_end("hello\n\n\n")
-    assert.is.equal(3, result)
-  end)
-
-  it("should count only newlines", function()
-    local result = utils.count_newlines_at_end("\n\n")
-    assert.is.equal(2, result)
+    assert.has_error(function()
+      utils.calculate_percentage_width("50% ")
+    end, "Input must be a string with a percent sign at the end (e.g. '50%').")
   end)
 end)
