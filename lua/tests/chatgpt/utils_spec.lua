@@ -85,41 +85,56 @@ describe("utils.replace_newlines_at_end", function()
   end)
 end)
 
-describe("utils.wrapTextToTable", function()
-  it("should wrap text into a table of lines", function()
-    local text = "hello world"
-    local result = utils.wrapTextToTable(text, 5)
-    assert.are.same({ "hello", "world" }, result)
-  end)
-
-  it("should handle empty string", function()
-    local result = utils.wrapTextToTable("", 10)
+describe("utils.split_string_by_line", function()
+  it("should split empty string into one empty element", function()
+    local result = utils.split_string_by_line("")
     assert.are.same({ "" }, result)
   end)
 
-  it("should handle text shorter than maxLineLength", function()
-    local text = "hello"
-    local result = utils.wrapTextToTable(text, 10)
+  it("should split single line without trailing newline", function()
+    local result = utils.split_string_by_line("hello")
     assert.are.same({ "hello" }, result)
   end)
 
-  it("should handle long words that exceed maxLineLength", function()
-    local text = "supercalifragilisticexpialidocious"
-    local result = utils.wrapTextToTable(text, 5)
-    assert.are.same({ "supercalifragilisticexpialidocious" }, result)
+  it("should split single line with trailing newline", function()
+    local result = utils.split_string_by_line("hello\n")
+    assert.are.same({ "hello", "" }, result)
   end)
 
-  it("should handle existing newlines", function()
-    local text = "line1\nline2"
-    local result = utils.wrapTextToTable(text, 10)
+  it("should split multiple lines", function()
+    local result = utils.split_string_by_line("line1\nline2")
     assert.are.same({ "line1", "line2" }, result)
+  end)
+
+  it("should handle multiple newlines", function()
+    local result = utils.split_string_by_line("\n\n")
+    assert.are.same({ "", "", "" }, result)
   end)
 end)
 
-describe("utils.wrapText", function()
-  it("should wrap text and join with newlines", function()
-    local text = "hello world"
-    local result = utils.wrapText(text, 5)
-    assert.is.equal("hello\nworld", result)
+describe("utils.count_newlines_at_end", function()
+  it("should return 0 for empty string", function()
+    local result = utils.count_newlines_at_end("")
+    assert.is.equal(0, result)
+  end)
+
+  it("should return 0 for string without trailing newlines", function()
+    local result = utils.count_newlines_at_end("hello")
+    assert.is.equal(0, result)
+  end)
+
+  it("should count single trailing newline", function()
+    local result = utils.count_newlines_at_end("hello\n")
+    assert.is.equal(1, result)
+  end)
+
+  it("should count multiple trailing newlines", function()
+    local result = utils.count_newlines_at_end("hello\n\n\n")
+    assert.is.equal(3, result)
+  end)
+
+  it("should count only newlines", function()
+    local result = utils.count_newlines_at_end("\n\n")
+    assert.is.equal(2, result)
   end)
 end)
