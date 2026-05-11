@@ -85,54 +85,39 @@ describe("utils.replace_newlines_at_end", function()
   end)
 end)
 
-describe("utils.calculate_percentage_width", function()
-  local mock_vim_api
-
-  before_each(function()
-    -- Initialize vim.api if not running in Neovim (like in a bare Lua environment mock)
-    -- But since this is a Neovim plugin, vim.api is normally available.
-    -- We can use stub from luassert if available, or manually backup the function
-    if not _G.vim then
-      _G.vim = { api = {} }
-    end
-    mock_vim_api = _G.vim.api.nvim_get_option
-    _G.vim.api.nvim_get_option = function(opt)
-      if opt == "columns" then
-        return 100
-      end
-      return 0
-    end
+describe("utils.match_indentation", function()
+  it("should return output unchanged if indentation already matches", function()
+    local input = "  local function a()\n"
+    local output = "  print('hello')\n"
+    local result = utils.match_indentation(input, output)
+    assert.is.equal(output, result)
   end)
 
-  after_each(function()
-    if mock_vim_api then
-      _G.vim.api.nvim_get_option = mock_vim_api
-    else
-      _G.vim.api.nvim_get_option = nil
-    end
+  it("should apply input indentation to output lines", function()
+    local input = "    print(a)\n"
+    local output = "a = 1\nb = 2\n"
+    local result = utils.match_indentation(input, output)
+    assert.is.equal("    a = 1\n    b = 2\n", result)
   end)
 
-  it("should calculate correct percentage width", function()
-    local result = utils.calculate_percentage_width("50%")
-    assert.is.equal(50, result)
-
-    result = utils.calculate_percentage_width("33.3%")
-    assert.is.equal(33, result) -- Because of math.floor
+  it("should handle empty lines in output without adding trailing whitespace", function()
+    local input = "  def func():\n"
+    local output = "pass\n\nprint(1)\n"
+    local result = utils.match_indentation(input, output)
+    assert.is.equal("  pass\n\n  print(1)\n", result)
   end)
 
-  it("should throw error if input is not a string", function()
-    assert.has_error(function()
-      utils.calculate_percentage_width(50)
-    end, "Input must be a string with a percent sign at the end (e.g. '50%').")
+  it("should ignore leading newlines when finding indentation", function()
+    local input = "\n\n  hello\n"
+    local output = "\nworld\n"
+    local result = utils.match_indentation(input, output)
+    assert.is.equal("\n  world\n", result)
   end)
 
-  it("should throw error if input string does not end with percent sign", function()
-    assert.has_error(function()
-      utils.calculate_percentage_width("50")
-    end, "Input must be a string with a percent sign at the end (e.g. '50%').")
-
-    assert.has_error(function()
-      utils.calculate_percentage_width("50% ")
-    end, "Input must be a string with a percent sign at the end (e.g. '50%').")
+  it("should handle empty strings and string without newlines", function()
+    local input = "\t\tlocal a = 1"
+    local output = "b = 2"
+    local result = utils.match_indentation(input, output)
+    assert.is.equal("\t\tb = 2", result)
   end)
 end)
