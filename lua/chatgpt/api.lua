@@ -16,7 +16,7 @@ function Api.chat_completions(custom_params, cb, should_stop)
   local openai_params = Utils.collapsed_openai_params(Config.options.openai_params)
   local params = vim.tbl_extend("keep", custom_params, openai_params)
 
-  if parans.model == "<dynamic>" then
+  if params.model == "<dynamic>" then
     params.model = openai_params.model
   end
   
