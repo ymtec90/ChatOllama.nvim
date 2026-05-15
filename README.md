@@ -1,12 +1,10 @@
-# ChatOllama.nvim
+﻿# ChatOllama.nvim
 
 ![Lua](https://img.shields.io/badge/Made%20with%20Lua-blueviolet.svg?style=for-the-badge&logo=lua)
 
 `ChatOllama` é um plugin para Neovim que permite utilizar a API do Ollama de forma integrada, permitindo gerar respostas em linguagem natural e código a partir de LLMs locais diretamente no seu editor.
 
 Ao utilizar o Ollama, este fork garante **privacidade total**, **custo zero de API** e **funcionalidade offline**. Seu código e prompts nunca saem da sua máquina!
-
-*(Nota: Para manter a compatibilidade com a base de código original, os comandos principais e módulos Lua retêm a nomenclatura `chatgpt`, mas internamente todas as chamadas são roteadas para a sua instância local do Ollama).*
 
 ## Funcionalidades
 
@@ -31,7 +29,7 @@ Ao utilizar o Ollama, este fork garante **privacidade total**, **custo zero de A
   "ymtec90/ChatOllama.nvim",
     event = "VeryLazy",
     config = function()
-      require("chatgpt").setup()
+      require("ChatOllama").setup()
     end,
     dependencies = {
       "MunifTanjim/nui.nvim",
@@ -46,7 +44,7 @@ Ao utilizar o Ollama, este fork garante **privacidade total**, **custo zero de A
 O `ChatOllama.nvim` já vem configurado para execução local. Você pode customizar o modelo padrão (ex: qwen2.5-coder:7b) no seu setup:
 
 ```lua
-require("chatgpt").setup({
+require("ChatOllama").setup({
   openai_params = {
     model = "qwen2.5-coder:7b",
     max_tokens = 4095,
@@ -59,20 +57,20 @@ require("chatgpt").setup({
 ## Uso
 Os comandos mantêm o prefixo original para compatibilidade:
 
-### `ChatGPT`
+### `ChatOllama`
 Abre a janela de chat interativo com o modelo configurado.
 
-### `ChatGPTEditWithInstructions`
+### `ChatOllamaEditWithInstructions`
 Abre a janela interativa para editar o texto selecionado ou o arquivo inteiro usando o LLM local.
 
-### `ChatGPTRun [ação]`
+### `ChatOllamaRun [ação]`
 Executa ações específicas. Exemplos:
 
-`ChatGPTRun add_tests`: Adiciona testes unitários ao código selecionado.
+`ChatOllamaRun add_tests`: Adiciona testes unitários ao código selecionado.
 
-`ChatGPTRun explain_code`: Explica o funcionamento do código.
+`ChatOllamaRun explain_code`: Explica o funcionamento do código.
 
-`ChatGPTRun fix_bugs`: Tenta encontrar e corrigir erros no trecho selecionado.
+`ChatOllamaRun fix_bugs`: Tenta encontrar e corrigir erros no trecho selecionado.
 
 ## Atalhos na Janela Interativa
 `<C-Enter> / <Enter>`: Enviar prompt
@@ -87,22 +85,22 @@ Executa ações específicas. Exemplos:
 
 ## Mapeamentos Sugeridos (WhichKey)
 ```lua
-local chatgpt = require("chatgpt")
+local ChatOllama = require("ChatOllama")
 wk.register({
     c = {
         name = "ChatOllama",
-        c = { "<cmd>ChatGPT<CR>", "Chat" },
-        e = { "<cmd>ChatGPTEditWithInstruction<CR>", "Editar com Instrução", mode = { "n", "v" } },
-        a = { "<cmd>ChatGPTRun add_tests<CR>", "Adicionar Testes", mode = { "n", "v" } },
-        f = { "<cmd>ChatGPTRun fix_bugs<CR>", "Corrigir Bugs", mode = { "n", "v" } },
-        x = { "<cmd>ChatGPTRun explain_code<CR>", "Explicar Código", mode = { "n", "v" } },
+        c = { "<cmd>ChatOllama<CR>", "Chat" },
+        e = { "<cmd>ChatOllamaEditWithInstruction<CR>", "Editar com Instrução", mode = { "n", "v" } },
+        a = { "<cmd>ChatOllamaRun add_tests<CR>", "Adicionar Testes", mode = { "n", "v" } },
+        f = { "<cmd>ChatOllamaRun fix_bugs<CR>", "Corrigir Bugs", mode = { "n", "v" } },
+        x = { "<cmd>ChatOllamaRun explain_code<CR>", "Explicar Código", mode = { "n", "v" } },
     },
 }, { prefix = "<leader>" })
 ```
 ## 💖 Créditos e Agradecimentos
 
-Este projeto é um fork direto do incrível [ChatGPT.nvim](https://github.com/jackMort/ChatGPT.nvim), criado por [jackMort](https://github.com/jackMort). 
+Este projeto é um fork direto do incrível [ChatOllama.nvim](https://github.com/jackMort/ChatOllama.nvim), criado por [jackMort](https://github.com/jackMort). 
 
 Toda a fundação da interface de usuário (UI), renderização de markdown, mapeamentos de teclas e a arquitetura central do plugin são méritos do projeto original. O **ChatOllama.nvim** nasceu com o propósito de adaptar essa excelente base para um ecossistema 100% local, focado em privacidade e custo zero, utilizando o [Ollama](https://ollama.com/).
 
-Se você gosta da experiência de uso deste plugin, por favor, considere dar uma estrela (⭐) no [repositório original](https://github.com/jackMort/ChatGPT.nvim) e apoiar o criador!
+Se você gosta da experiência de uso deste plugin, por favor, considere dar uma estrela (⭐) no [repositório original](https://github.com/jackMort/ChatOllama.nvim) e apoiar o criador!
