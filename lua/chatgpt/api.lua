@@ -9,18 +9,16 @@ function Api.completions(custom_params, cb)
   local openai_params = Utils.collapsed_openai_params(Config.options.openai_params)
   local params = vim.tbl_extend("keep", custom_params, openai_params)
   
-  -- Forçar o uso do modelo local do Ollama
-  params.model = "qwen2.5-coder:7b"
-  
   Api.make_call(Api.COMPLETIONS_URL, params, cb)
 end
 
 function Api.chat_completions(custom_params, cb, should_stop)
   local openai_params = Utils.collapsed_openai_params(Config.options.openai_params)
   local params = vim.tbl_extend("keep", custom_params, openai_params)
-  
-  -- Forçar o uso do modelo local do Ollama
-  params.model = "qwen2.5-coder:7b"
+
+  if parans.model == "<dynamic>" then
+    params.model = openai_params.model
+  end
   
   local stream = params.stream or false
   if stream then
@@ -117,8 +115,7 @@ function Api.edits(custom_params, cb)
   }
 
   local params = {
-    -- Forçar o uso do modelo local do Ollama
-    model = "qwen2.5-coder:7b",
+    model = custom_params.model or Config.options.openai_edit_params.model,
     messages = messages,
     temperature = custom_params.temperature,
     top_p = custom_params.top_p,
