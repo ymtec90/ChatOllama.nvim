@@ -3,20 +3,14 @@
     "type": "chat",
     "opts": {
       "template": "Complete the following {{filetype}} code by continuing it. Respond with the COMPLETE code (existing + new). No markdown fences, no explanations.\n\n{{input}}",
-      "strategy": "replace",
-      "params": {
-        "model": {model}
-      }
+      "strategy": "replace"
     }
   },
   "grammar_correction": {
     "type": "chat",
     "opts": {
       "template": "Correct this to standard {{lang}}:\n\n{{input}}",
-      "strategy": "replace",
-      "params": {
-        "model": {model}
-      }
+      "strategy": "replace"
     },
     "args": {
       "lang": {
@@ -32,7 +26,6 @@
       "template": "Translate this into {{lang}}:\n\n{{input}}",
       "strategy": "replace",
       "params": {
-        "model": {model},
         "temperature": 0.3
       }
     },
@@ -48,60 +41,42 @@
     "type": "chat",
     "opts": {
       "template": "Extract the main keywords from the following text.\n\n{{input}}",
-      "strategy": "replace",
-      "params": {
-        "model": {model}
-      }
+      "strategy": "replace"
     }
   },
   "docstring": {
     "type": "chat",
     "opts": {
       "template": "Add a high quality docstring to the following {{filetype}} code. Include parameter types, return types, and any errors that might be raised.\n\nCode:\n{{input}}\n\nRespond with ONLY the complete code including the docstring. No markdown fences, no explanations.",
-      "strategy": "edit",
-      "params": {
-        "model": {model}
-      }
+      "strategy": "edit"
     }
   },
   "add_tests": {
     "type": "chat",
     "opts": {
       "template": "Implement tests for the following {{filetype}} code.\n\nCode:\n{{input}}\n\nRespond with ONLY the test code. No markdown fences, no explanations.",
-      "strategy": "append",
-      "params": {
-        "model": {model}
-      }
+      "strategy": "append"
     }
   },
   "optimize_code": {
     "type": "chat",
     "opts": {
       "template": "Optimize the following {{filetype}} code for better performance and readability.\n\nCode:\n{{input}}\n\nRespond with ONLY the optimized code. No markdown fences, no explanations.",
-      "strategy": "edit",
-      "params": {
-        "model": {model}
-      }
+      "strategy": "edit"
     }
   },
   "summarize": {
     "type": "chat",
     "opts": {
       "template": "Summarize the following text.\n\nText:\n\"\"\"\n{{input}}\n\"\"\"\n\nSummary:",
-      "strategy": "edit",
-      "params": {
-        "model": {model}
-      }
+      "strategy": "edit"
     }
   },
   "fix_bugs": {
     "type": "chat",
     "opts": {
       "template": "Fix bugs in the following {{filetype}} code.\n\nCode:\n{{input}}\n\nRespond with ONLY the fixed code. No markdown fences, no explanations.",
-      "strategy": "edit",
-      "params": {
-        "model": {model}
-      }
+      "strategy": "edit"
     }
   },
   "explain_code": {
@@ -109,10 +84,7 @@
     "opts": {
       "title": " Explain Code",
       "template": "Explain the following {{filetype}} code. Use markdown format with clear sections.\n\nCode:\n{{input}}",
-      "strategy": "display",
-      "params": {
-        "model": {model}
-      }
+      "strategy": "display"
     }
   },
   "roxygen_edit": {
@@ -121,7 +93,6 @@
       "template": "Insert a roxygen skeleton to document this R function:\n\n```{{filetype}}\n[insert]\n\n{{input}}\n\n```",
       "strategy": "prepend",
       "params": {
-        "model": {model},
         "temperature": 0.5,
         "max_tokens": 1024
       }
@@ -133,7 +104,6 @@
       "strategy": "quick_fix",
       "template": "{{input}}",
       "params": {
-        "model": {model},
         "max_tokens": 2048,
         "messages": [
           {
@@ -158,7 +128,7 @@
           },
           {
             "role": "user",
-            "content": "\n0 function BaseAction:init(opts)\n1   self.opts = opts\n2 end"
+            "content": "\n0 function BaseAction:init(opts)\n1    self.opts = opts\n2 end"
           },
           {
             "role": "assistant",
@@ -172,10 +142,7 @@
     "type": "chat",
     "opts": {
       "template": "Fix the following error in the {{filetype}} code.\n\nError:\n{{diagnostic}}\n\nCode:\n{{input}}\n\nRespond with ONLY the fixed code. No markdown fences, no explanations.",
-      "strategy": "edit",
-      "params": {
-        "model": {model}
-      }
+      "strategy": "edit"
     }
   },
   "explain_diagnostic": {
@@ -183,20 +150,14 @@
     "opts": {
       "title": " Explain Error",
       "template": "Explain the following error and how to fix it. Use markdown format.\n\nError:\n{{diagnostic}}\n\nCode:\n{{input}}",
-      "strategy": "display",
-      "params": {
-        "model": {model}
-      }
+      "strategy": "display"
     }
   },
   "fix_diagnostics": {
     "type": "chat",
     "opts": {
       "template": "Fix all the following errors in the {{filetype}} code.\n\nErrors:\n{{diagnostics}}\n\nCode:\n{{input}}\n\nRespond with ONLY the fixed code. No markdown fences, no explanations.",
-      "strategy": "edit",
-      "params": {
-        "model": {model}
-      }
+      "strategy": "edit"
     }
   }
 }
