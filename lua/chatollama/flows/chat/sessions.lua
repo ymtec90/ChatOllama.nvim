@@ -2,10 +2,10 @@
 M.vts = {}
 
 local Popup = require("nui.popup")
-local Config = require("ChatOllama.config")
-local Session = require("ChatOllama.flows.chat.session")
-local Utils = require("ChatOllama.utils")
-local InputWidget = require("ChatOllama.common.input_widget")
+local Config = require("chatollama.config")
+local Session = require("chatollama.flows.chat.session")
+local Utils = require("chatollama.utils")
+local InputWidget = require("chatollama.common.input_widget")
 
 local namespace_id = vim.api.nvim_create_namespace("ChatOllamaNS")
 

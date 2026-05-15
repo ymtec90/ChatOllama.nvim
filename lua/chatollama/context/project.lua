@@ -1,6 +1,6 @@
 ﻿local M = {}
 
-local Config = require("ChatOllama.config")
+local Config = require("chatollama.config")
 
 -- Manifest files to detect project type
 local MANIFEST_FILES = {

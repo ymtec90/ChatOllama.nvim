@@ -1,5 +1,5 @@
 ﻿local Input = require("nui.input")
-local Config = require("ChatOllama.config")
+local Config = require("chatollama.config")
 
 return function(name, on_submit)
   local input = Input({

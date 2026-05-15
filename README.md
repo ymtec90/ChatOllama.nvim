@@ -29,7 +29,7 @@ Ao utilizar o Ollama, este fork garante **privacidade total**, **custo zero de A
   "ymtec90/ChatOllama.nvim",
     event = "VeryLazy",
     config = function()
-      require("ChatOllama").setup()
+      require("chatollama").setup()
     end,
     dependencies = {
       "MunifTanjim/nui.nvim",
@@ -44,7 +44,7 @@ Ao utilizar o Ollama, este fork garante **privacidade total**, **custo zero de A
 O `ChatOllama.nvim` já vem configurado para execução local. Você pode customizar o modelo padrão (ex: qwen2.5-coder:7b) no seu setup:
 
 ```lua
-require("ChatOllama").setup({
+require("chatollama").setup({
   openai_params = {
     model = "qwen2.5-coder:7b",
     max_tokens = 4095,
@@ -85,7 +85,7 @@ Executa ações específicas. Exemplos:
 
 ## Mapeamentos Sugeridos (WhichKey)
 ```lua
-local ChatOllama = require("ChatOllama")
+local ChatOllama = require("chatollama")
 wk.register({
     c = {
         name = "ChatOllama",

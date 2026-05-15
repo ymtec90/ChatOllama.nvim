@@ -1,5 +1,5 @@
 ﻿local Popup = require("nui.popup")
-local Config = require("ChatOllama.config")
+local Config = require("chatollama.config")
 
 local SystemWindow = Popup:extend("SystemWindow")
 

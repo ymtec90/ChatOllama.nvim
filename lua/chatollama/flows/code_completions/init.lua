@@ -1,7 +1,7 @@
-﻿local Api = require("ChatOllama.api")
-local Utils = require("ChatOllama.utils")
-local Signs = require("ChatOllama.signs")
-local Spinner = require("ChatOllama.spinner")
+﻿local Api = require("chatollama.api")
+local Utils = require("chatollama.utils")
+local Signs = require("chatollama.signs")
+local Spinner = require("chatollama.spinner")
 
 local M = {}
 

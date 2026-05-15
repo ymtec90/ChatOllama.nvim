@@ -1,7 +1,7 @@
-local job = require("plenary.job")
-local Config = require("ChatOllama.config")
-local logger = require("ChatOllama.common.logger")
-local Utils = require("ChatOllama.utils")
+﻿local job = require("plenary.job")
+local Config = require("chatollama.config")
+local logger = require("chatollama.common.logger")
+local Utils = require("chatollama.utils")
 
 local Api = {}
 

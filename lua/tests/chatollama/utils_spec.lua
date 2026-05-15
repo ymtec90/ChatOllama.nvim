@@ -1,4 +1,4 @@
-﻿local utils = require("ChatOllama.utils")
+﻿local utils = require("chatollama.utils")
 
 describe("utils.table_shallow_copy", function()
   it("should return an empty table when given an empty table", function()

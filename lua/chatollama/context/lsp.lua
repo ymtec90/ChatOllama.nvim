@@ -1,6 +1,6 @@
 ﻿local M = {}
 
-local Config = require("ChatOllama.config")
+local Config = require("chatollama.config")
 
 -- Get the word under cursor
 local function get_word_under_cursor()

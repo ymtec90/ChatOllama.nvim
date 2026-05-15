@@ -1,4 +1,4 @@
-﻿local Config = require("ChatOllama.config")
+﻿local Config = require("chatollama.config")
 
 local M = {}
 

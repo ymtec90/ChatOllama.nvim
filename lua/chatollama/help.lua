@@ -4,7 +4,7 @@ M.vts = {}
 local NuiLine = require("nui.line")
 local NuiText = require("nui.text")
 local Popup = require("nui.popup")
-local Config = require("ChatOllama.config")
+local Config = require("chatollama.config")
 
 M.get_help_panel = function(type)
   M.type = type

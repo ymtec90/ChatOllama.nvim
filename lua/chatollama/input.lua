@@ -3,7 +3,7 @@ local Text = require("nui.text")
 local defaults = require("nui.utils").defaults
 local is_type = require("nui.utils").is_type
 local event = require("nui.utils.autocmd").event
-local Config = require("ChatOllama.config")
+local Config = require("chatollama.config")
 
 local placeholder_ns = vim.api.nvim_create_namespace("ChatOllamaInputPlaceholder")
 

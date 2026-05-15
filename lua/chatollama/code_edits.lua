@@ -3,13 +3,13 @@
 local Layout = require("nui.layout")
 local Popup = require("nui.popup")
 
-local ChatInput = require("ChatOllama.input")
-local Api = require("ChatOllama.api")
-local Config = require("ChatOllama.config")
-local Utils = require("ChatOllama.utils")
-local Spinner = require("ChatOllama.spinner")
-local Settings = require("ChatOllama.settings")
-local Help = require("ChatOllama.help")
+local ChatInput = require("chatollama.input")
+local Api = require("chatollama.api")
+local Config = require("chatollama.config")
+local Utils = require("chatollama.utils")
+local Spinner = require("chatollama.spinner")
+local Settings = require("chatollama.settings")
+local Help = require("chatollama.help")
 
 local namespace_id = vim.api.nvim_create_namespace("ChatOllamaNS")
 

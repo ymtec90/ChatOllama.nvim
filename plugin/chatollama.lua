@@ -1,24 +1,24 @@
 ﻿vim.api.nvim_create_user_command("ChatOllama", function()
-  require("ChatOllama").openChat()
+  require("chatollama").openChat()
 end, {})
 
 vim.api.nvim_create_user_command("ChatOllamaActAs", function()
-  require("ChatOllama").selectAwesomePrompt()
+  require("chatollama").selectAwesomePrompt()
 end, {})
 
 vim.api.nvim_create_user_command("ChatOllamaEditWithInstructions", function()
-  require("ChatOllama").edit_with_instructions()
+  require("chatollama").edit_with_instructions()
 end, {
   range = true,
 })
 
 vim.api.nvim_create_user_command("ChatOllamaRun", function(opts)
-  require("ChatOllama").run_action(opts)
+  require("chatollama").run_action(opts)
 end, {
   nargs = "*",
   range = true,
   complete = function()
-    local ActionFlow = require("ChatOllama.flows.actions")
+    local ActionFlow = require("chatollama.flows.actions")
     local action_definitions = ActionFlow.read_actions()
 
     local actions = {}
@@ -32,5 +32,5 @@ end, {
 })
 
 vim.api.nvim_create_user_command("ChatOllamaCompleteCode", function(opts)
-  require("ChatOllama").complete_code(opts)
+  require("chatollama").complete_code(opts)
 end, {})

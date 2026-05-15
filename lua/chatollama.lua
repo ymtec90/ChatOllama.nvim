@@ -1,8 +1,8 @@
 ﻿-- main module file
-local api = require("ChatOllama.api")
-local module = require("ChatOllama.module")
-local config = require("ChatOllama.config")
-local signs = require("ChatOllama.signs")
+local api = require("chatollama.api")
+local module = require("chatollama.module")
+local config = require("chatollama.config")
+local signs = require("chatollama.signs")
 
 local M = {}
 
@@ -90,10 +90,10 @@ M.complete_code = module.complete_code
 
 -- Context APIs (deprecated but kept for backwards compatibility)
 M.add_context = function()
-  local lsp_context = require("ChatOllama.context.lsp")
+  local lsp_context = require("chatollama.context.lsp")
   lsp_context.get_context(function(item)
     if item then
-      local Context = require("ChatOllama.context")
+      local Context = require("chatollama.context")
       local ref = Context.make_ref(item)
       Context.add(ref, item)
       vim.notify(string.format("Context added: %s", ref), vim.log.levels.INFO)
@@ -102,10 +102,10 @@ M.add_context = function()
 end
 
 M.add_project_context = function()
-  local project_context = require("ChatOllama.context.project")
+  local project_context = require("chatollama.context.project")
   local item = project_context.get_context()
   if item then
-    local Context = require("ChatOllama.context")
+    local Context = require("chatollama.context")
     local ref = Context.make_ref(item)
     Context.add(ref, item)
     vim.notify(string.format("Context added: %s", ref), vim.log.levels.INFO)

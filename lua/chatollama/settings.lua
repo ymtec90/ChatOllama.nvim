@@ -1,7 +1,7 @@
 ﻿local M = {}
 
 local Popup = require("nui.popup")
-local Config = require("ChatOllama.config")
+local Config = require("chatollama.config")
 
 local namespace_id = vim.api.nvim_create_namespace("ChatOllamaNS")
 
@@ -91,7 +91,7 @@ M.render_content = function(params, session_name)
   })
   write_virtual_text(panel.bufnr, namespace_id, help_line, {
     { "  Configure in ", "Comment" },
-    { "require('ChatOllama').setup()", "String" },
+    { "require('chatollama').setup()", "String" },
   })
 end
 

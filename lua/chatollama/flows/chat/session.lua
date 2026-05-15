@@ -1,4 +1,4 @@
-﻿local classes = require("ChatOllama.common.classes")
+﻿local classes = require("chatollama.common.classes")
 local Path = require("plenary.path")
 local scan = require("plenary.scandir")
 

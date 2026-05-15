@@ -1,8 +1,8 @@
-﻿local classes = require("ChatOllama.common.classes")
-local BaseAction = require("ChatOllama.flows.actions.base")
-local Api = require("ChatOllama.api")
-local Utils = require("ChatOllama.utils")
-local Config = require("ChatOllama.config")
+﻿local classes = require("chatollama.common.classes")
+local BaseAction = require("chatollama.flows.actions.base")
+local Api = require("chatollama.api")
+local Utils = require("chatollama.utils")
+local Config = require("chatollama.config")
 
 local EditAction = classes.class(BaseAction)
 

@@ -1,8 +1,8 @@
-﻿local classes = require("ChatOllama.common.classes")
-local Signs = require("ChatOllama.signs")
-local Spinner = require("ChatOllama.spinner")
-local Utils = require("ChatOllama.utils")
-local Config = require("ChatOllama.config")
+﻿local classes = require("chatollama.common.classes")
+local Signs = require("chatollama.signs")
+local Spinner = require("chatollama.spinner")
+local Utils = require("chatollama.utils")
+local Config = require("chatollama.config")
 
 local BaseAction = classes.class()
 

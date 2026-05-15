@@ -5,8 +5,8 @@ local action_state = require("telescope.actions.state")
 local previewers = require("telescope.previewers")
 local job = require("plenary.job")
 
-local Utils = require("ChatOllama.utils")
-local Config = require("ChatOllama.config")
+local Utils = require("chatollama.utils")
+local Config = require("chatollama.config")
 
 local function defaulter(f, default_opts)
   default_opts = default_opts or {}

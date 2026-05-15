@@ -14,12 +14,12 @@
 --       }
 --     }
 --   }
-local classes = require("ChatOllama.common.classes")
-local BaseAction = require("ChatOllama.flows.actions.base")
-local Api = require("ChatOllama.api")
-local Utils = require("ChatOllama.utils")
-local Config = require("ChatOllama.config")
-local Edits = require("ChatOllama.code_edits")
+local classes = require("chatollama.common.classes")
+local BaseAction = require("chatollama.flows.actions.base")
+local Api = require("chatollama.api")
+local Utils = require("chatollama.utils")
+local Config = require("chatollama.config")
+local Edits = require("chatollama.code_edits")
 
 local ChatAction = classes.class(BaseAction)
 
@@ -91,7 +91,7 @@ function ChatAction:on_result(answer, usage)
     local _, start_row, start_col, end_row, end_col = self:get_visual_selection()
 
     if self.strategy == STRATEGY_DISPLAY then
-      local PreviewWindow = require("ChatOllama.common.preview_window")
+      local PreviewWindow = require("chatollama.common.preview_window")
       -- compute size
       -- the width is calculated based on the maximum number of lines and the height is calculated based on the width
       local cur_win = vim.api.nvim_get_current_win()

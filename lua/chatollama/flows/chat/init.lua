@@ -1,6 +1,6 @@
-﻿local Session = require("ChatOllama.flows.chat.session")
-local Prompts = require("ChatOllama.prompts")
-local Chat = require("ChatOllama.flows.chat.base")
+﻿local Session = require("chatollama.flows.chat.session")
+local Prompts = require("chatollama.prompts")
+local Chat = require("chatollama.flows.chat.base")
 
 local ROLE_TO_CODE = {
   ["user"] = 1,

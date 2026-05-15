@@ -1,10 +1,10 @@
 ﻿-- module represents a lua module for the plugin
 local M = {}
 
-local Chat = require("ChatOllama.flows.chat")
-local Edits = require("ChatOllama.code_edits")
-local Actions = require("ChatOllama.flows.actions")
-local CodeCompletions = require("ChatOllama.flows.code_completions")
+local Chat = require("chatollama.flows.chat")
+local Edits = require("chatollama.code_edits")
+local Actions = require("chatollama.flows.actions")
+local CodeCompletions = require("chatollama.flows.code_completions")
 
 M.open_chat = Chat.open
 M.open_chat_with_awesome_prompt = Chat.open_with_awesome_prompt

@@ -1,4 +1,4 @@
-﻿local project = require("ChatOllama.context.project")
+﻿local project = require("chatollama.context.project")
 
 describe("ChatOllama.context.project", function()
   local original_vim

@@ -1,9 +1,9 @@
 ﻿local M = {}
 
-local ChatAction = require("ChatOllama.flows.actions.chat")
-local CompletionAction = require("ChatOllama.flows.actions.completions")
-local EditAction = require("ChatOllama.flows.actions.edits")
-local Config = require("ChatOllama.config")
+local ChatAction = require("chatollama.flows.actions.chat")
+local CompletionAction = require("chatollama.flows.actions.completions")
+local EditAction = require("chatollama.flows.actions.edits")
+local Config = require("chatollama.config")
 
 local classes_by_type = {
   chat = ChatAction,
